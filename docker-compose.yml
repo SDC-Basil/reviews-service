@@ -2,10 +2,13 @@ services:
   mongo:
     image: mongo
     restart: always
+    containerName: mongo
     ports:
-      - 27107:27107
+      - 27017:27017
     environment:
       - MONGO_INITDB_DATABASE=Reviews
+    volumes:
+      -
 
   web:
     build: .
