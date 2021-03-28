@@ -2,14 +2,14 @@ const Review = require('./model');
 
 module.exports = {
   getAllReviews: (productId) => {
-   return Review.findById({_id: productId});
+   return Review.findById({produdct_id: productId});
   },
   getReviewsMeta: (productId) => {
-    return Review.findById({_id: productId});
+    return Review.findById({produdct_id: productId});
   },
   postReview: (productId, rating, summary, body, recommend, name, email, photos, characteristics) => {
     review = new Review({
-      review_id,
+      review: produdct_id,
       rating: rating,
       date: { type: Date, default: Date.now },
       summary: summary,
@@ -21,6 +21,6 @@ module.exports = {
       helpfulness: helpfulness,
       characteristics: characteristics
     })
-    Review.findOneAndUpdate({_id: productId}, {reviews: [...reviews, review]})
+    Review.findOneAndUpdate({produdct_id: productId}, {reviews: [...reviews, review]})
   }
 }

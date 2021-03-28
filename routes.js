@@ -57,10 +57,10 @@ router.get(`/reviews/meta`, (req, res) => {
         value = character.v;
         characteristics[key] = value;
         meta.push(characteristics);
-
       })
       characteristics = {};
     });
+
     res.send({product_id: data._id, averageRating: avg/ data.reviews.length - 1, helpfulness, recommended, ratings, meta});
   }).catch((err) => {
     console.log(err);
