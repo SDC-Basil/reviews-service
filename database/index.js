@@ -9,15 +9,10 @@ mongoose.connect('mongodb://mongo:27017/Reviews', {
 })
 
 const db = mongoose.connection;
-
-db.once('open', _ => {
-  console.log('Database connected: Reviews')
-
-})
-
-db.on('error', err => {
-  console.error('connection error:', err)
-})
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('Succesfully connected with mongoose')
+});
 
 module.exports = db;
 
