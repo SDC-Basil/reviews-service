@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const review = mongoose.Schema({
-  _id: {type: Number, required: true, index: true },
+  product_id: {type: Number, required: true, index: true },
   reviews: [
     {
       review_id: {type: Number, unique: true, index: true},
@@ -20,7 +20,7 @@ const review = mongoose.Schema({
       }]
     }
   ]
-}, {collection: '4.2'});
+});
 
 const Review = mongoose.model('Review', review);
 

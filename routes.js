@@ -38,7 +38,7 @@ router.get(`/reviews/:productId`, (req, res) => {
       characteristics = {};
     });
 
-    res.send({product_id: data._id, averageRating: avg/ data.reviews.length - 1, helpfulness, recommended, ratings, meta});
+    res.send({product_id: productId, averageRating: avg/ data.reviews.length - 1, helpfulness, recommended, ratings, meta});
   }).catch((err) => {
     console.log(err);
     res.status(500).send('there was an error in getting the reviews');
