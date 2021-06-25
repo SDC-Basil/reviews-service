@@ -31,6 +31,7 @@ function getProductReview(req, res) {
     const { productId } = req.params;
 
       controllers.getReviewsMeta(productId).then((data) => {
+
         console.log(data)
       var avg = 0;
       var ratings = {};
