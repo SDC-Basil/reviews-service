@@ -31,7 +31,10 @@ function getProductReview(req, res) {
     const { productId } = req.params;
 
       controllers.getReviewsMeta(productId).then((data) => {
-
+        if (!data) {
+          res.status(404).send('there are no reviews for this id')
+          return;
+        }
         console.log(data)
       var avg = 0;
       var ratings = {};
