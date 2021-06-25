@@ -2,32 +2,9 @@ var router = require('express').Router();
 var controllers = require('./database/controllers.js');
 
 
-router.get(`/reviews`, (req, res) => {
-  let page = req.query.page;
-  let count = req.query.count || 5;
-  let sortString = req.query.sortString;
-  let productId = req.query.productId;
 
-  return controllers.getAllReviews(productId, page, count, sortString).then((data) => {
-    if (!data) {
-      res.status(404).send('there are no reviews for this id')
-      return;
-    }
-    reviews = [];
-    data.reviews.map((review, i) => {
-      if (i <= count) {
-        reviews.push(review);
-      }
-    })
-    res.send({product_id: data._id, count, reviews});
-  }).catch((err) => {
-    res.status(500).send('there was an error in retrieving the reviews');
-    console.log(err);
-  })
-})
-
-router.get(`/reviews/meta`, (req, res) => {
-  let productId = req.query.productId;
+router.get(`/reviews/:productId`, (req, res) => {
+  const {productId} = req.params;
   return controllers.getReviewsMeta(productId).then((data) => {
     if (!data) {
       res.status(404).send('there are no reviews for this id')

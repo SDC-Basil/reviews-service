@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 require('dotenv').config()
 const { Schema } = mongoose;
 
-mongoose.connect('mongodb://mongo:27017/Reviews', {
+mongoose.connect('mongodb://mongo:27017/allreviews', {
     authSource:"admin",
     useUnifiedTopology: true,
     useNewUrlParser: true,
