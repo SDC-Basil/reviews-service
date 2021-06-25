@@ -7,6 +7,7 @@ var cors = require('cors');
 
 app.use(cors());
 app.use(express.json());
+app.get('/loaderio-578eae4f02bb2542173fedad54dbcaac/', (req, res) => res.send(process.env.LOADER))
 app.use('/', router);
 
 
