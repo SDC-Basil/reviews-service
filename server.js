@@ -1,17 +1,15 @@
 var express = require('express');
 var database = require('./database');
 var app = express();
-var router = require('./routes.js');
-var cors = require('cors');
-
-
-app.use(cors());
 app.use(express.json());
+require('dotenv').config();
+
+var router = require('./routes.js');
 app.use('/', router);
 
 
 
-app.listen(3000, function() {
+app.listen(process.env.PORT, function() {
   console.log(`listening on port 3000`);
 });
 
