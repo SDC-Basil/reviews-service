@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var controllers = require('./database/controllers.js');
 const redis = require("redis");
-const client = redis.createClient(process.env.REDIS_PORT);
+const client = redis.createClient(process.env.REDIS_PORT, "redis");
 
 client.on("error", function(error) {
   console.error(error);
@@ -26,52 +26,50 @@ function cacheProducts(req, res, next) {
 }
 
 
-function getProductReview(req, res) {
-
+async function getProductReview(req, res, next) {
+  try {
     const { productId } = req.params;
 
-      controllers.getReviewsMeta(productId).then((data) => {
-        if (!data) {
-          res.status(404).send('there are no reviews for this id')
-          return;
-        }
-        console.log(data)
-      var avg = 0;
-      var ratings = {};
-      var recommended = 0;
-      var helpfulness = 0;
-      var characteristics = {};
-      var meta = [];
-      data.reviews.map((review, i) => {
-        if (review.recommend) {
-          recommended += 1;
-        }
-        if (!ratings[review.rating]) {
-          ratings[review.rating] = 1;
-        } else {
-          ratings[review.rating] += 1;
-        }
-          avg += review.rating;
-          if (review.characteristics.length !== 0) {
-            characteristics.id = review.review_id;
-          }
-        review.characteristics.map((character) => {
-          var key = character.k;
-          value = character.v;
-          characteristics[key] = value;
-          meta.push(characteristics);
-        })
-        characteristics = {};
-      });
-      let currentReview = {product_id: productId, averageRating: avg/ data.reviews.length - 1, helpfulness, recommended, ratings, meta}
+    const data = await controllers.getReviewsMeta(productId);
 
-      client.setex(productId, 600, JSON.stringify(currentReview))
+    var avg = 0;
+    var ratings = {};
+    var recommended = 0;
+    var helpfulness = 0;
+    var characteristics = {};
+    var meta = [];
 
-      res.send(currentReview);
-
-      }).catch((err) => {
-        console.log(err)
+    data.reviews.map((review, i) => {
+      if (review.recommend) {
+        recommended += 1;
+      }
+      if (!ratings[review.rating]) {
+        ratings[review.rating] = 1;
+      } else {
+        ratings[review.rating] += 1;
+      }
+        avg += review.rating;
+      if (review.characteristics.length !== 0) {
+          characteristics.id = review.review_id;
+      }
+      review.characteristics.map((character) => {
+        var key = character.k;
+        value = character.v;
+        characteristics[key] = value;
+        meta.push(characteristics);
       })
+    })
+
+    currentReview = {product_id: Number(productId), averageRating: avg/ data.reviews.length - 1, helpfulness, recommended, ratings, meta}
+
+    client.setex(productId, 600, JSON.stringify(currentReview))
+
+    res.send(currentReview);
+}
+    catch (err) {
+        console.log(err)
+        res.sendStatus(500)
+      }
 
 }
 
